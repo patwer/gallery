@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    
+    tools {nodejs "nodejs"} 
+	
+	
+    
+    stages {
+							stage('Start') {
+													steps {
+														echo 'Build is starting'
+													}
+							}
+							stage('Clone github repository') {
+													steps {
+														git url: 'https://github.com/patwer/gallery', branch: 'master'
+													}
+							}
+						
+							stage('Install dependencies') {
+													steps {
+														sh '''
+														  
+														   npm install
+														   '''
+													}
+							}
+							stage('Test') {
+													  steps {
+														 sh 'npm test'
+													  } 
+							}   
+							stage('Deploy') {
+													steps {
+														sh 'curl -X POST https://api.render.com/deploy/srv-cg7l7j82qv28u2u6t59g?key=rHiuwqvk8So'				
+																		
+										  
+															}
+											}
+			
+		}
+		 post {
+        success {
+            			slackSend color: "good", message: "Successful deployment - Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:'https://gallery-t3vi.onrender.com'"
+        }
+
+        failure {
+         			slackSend color: "good", message: "Deployment failed - Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:'https://gallery-t3vi.onrender.com'"
+        }
+         always{
+            	slackSend color: "good", message: "Patrick W.IP1"
+            }   
+        
+    }
+}
