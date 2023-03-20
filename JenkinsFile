@@ -42,13 +42,17 @@ pipeline {
 		 post {
         success {
             			slackSend color: "good", message: "Successful deployment - Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:'https://gallery-t3vi.onrender.com'"
+        emailext attachLog: true, body: "Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:\'https://gallery-t3vi.onrender.com\'", subject: "Job Success", to: "patrickwapptest@gmail.com"
+            
         }
 
         failure {
          			slackSend color: "good", message: "Deployment failed - Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:'https://gallery-t3vi.onrender.com'"
+       emailext attachLog: true, body: "Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:\'https://gallery-t3vi.onrender.com\'", subject: "Job Failed", to: "patrickwapptest@gmail.com"
         }
          always{
             	slackSend color: "good", message: "Patrick W.IP1"
+            	emailext attachLog: true, body: "Build \'${env.JOB_NAME}:${env.BUILD_NUMBER}\' link:\'https://gallery-t3vi.onrender.com\'", subject: "Job status", to: "patrickwapptest@gmail.com"
             }   
         
     }
